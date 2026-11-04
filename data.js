@@ -1,6 +1,5 @@
 // 포트폴리오 콘텐츠. 내용 수정은 이 파일에서만 하면 됩니다.
 // tags: 사례의 분야 (backend | devops | data) — 필터와 배지에 사용
-// TODO 표시는 게시 전에 확인할 항목입니다.
 
 window.PROFILE = {
   name: "공병우",
