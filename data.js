@@ -10,7 +10,7 @@ window.PROFILE = {
   photo: "assets/profile.jpg",
   education: [
     { title: "경상국립대학교 수학과 · 데이터사이언스학(복수전공)", sub: "2019.03 ~ 2026.02" },
-    { title: "삼성 청년 SW·AI 아카데미 (SSAFY) 15기", sub: "2026.01 ~ 2026.12 (수료 예정)" }, // TODO 시작·종료 월 확인
+    { title: "삼성 청년 SW·AI 아카데미 (SSAFY) 15기", sub: "2026.01 ~ 2026.12 (수료 예정)" },
   ],
   certs: ["정보처리기사", "빅데이터분석기사", "SQLD", "ADsP"],
 };
