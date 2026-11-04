@@ -58,7 +58,7 @@ window.PROJECTS = {
     title: "Potner",
     subtitle: "반려식물 자율주행 로봇",
     period: "2026.07 ~ 2026.08",
-    team: "SSAFY 15기 공통 프로젝트", // TODO 인원
+    team: "SSAFY 15기 공통 프로젝트 · 6인 팀",
     role: "라즈베리파이 스테이션(센서·급수·송풍·촬영) 단독 설계·구현, 로봇 LLM·음성 파이프라인 구현",
     summary:
       "서버가 식물 상태를 판단하면 로봇(Jetson)이 스테이션까지 이동·도킹하고, 스테이션(Raspberry Pi)이 급수·송풍·촬영을 수행합니다. 장치와 서버는 MQTT 명령/회신으로 다음 단계를 잇습니다.",
@@ -197,8 +197,8 @@ window.PROJECTS = {
   circular: {
     title: "Circular-Fashion",
     subtitle: "순환 패션 소재 유통 플랫폼",
-    period: "2026", // TODO 기간
-    team: "6인 팀",
+    period: "2026.08 ~ 2026.09",
+    team: "SSAFY 15기 특화 프로젝트 · 6인 팀",
     role: "인프라(EC2·Compose·Nginx·Jenkins·시크릿) 담당 + 지갑 서명 로그인, 공통 기능(시간대·파일 업로드·에러 응답·권한), Material 도메인",
     summary:
       "폐소재 등록부터 가공·생산·소비자 구매까지 소재 이력을 Hyperledger Besu에 기록하고, 제품 QR 여권으로 공개 검증하는 플랫폼입니다.",
@@ -338,8 +338,8 @@ window.PROJECTS = {
   finance: {
     title: "Richman",
     subtitle: "금융 통합 대시보드 · 주식 파트",
-    period: "", // TODO 기간
-    team: "팀 프로젝트", // TODO 인원
+    period: "2026.04 ~ 2026.06",
+    team: "SSAFY 15기 관통 프로젝트 · 3인 팀",
     role: "주식 파트 전체 설계·구현 (백엔드 API 10개, 뷰 3개, 컴포넌트 4개)",
     summary: "국내·미국 주식 시세와 HTS형 캔들 차트, 이동평균 기반 예측과 AI 코멘트를 제공하는 대시보드입니다.",
     flow: [],
