@@ -1,5 +1,5 @@
 // 포트폴리오 콘텐츠. 내용 수정은 이 파일에서만 하면 됩니다.
-// tags: 사례가 어느 직무 버전에 노출될지 (backend | devops | data)
+// tags: 사례의 분야 (backend | devops | data) — 필터와 배지에 사용
 // TODO 표시는 게시 전에 확인할 항목입니다.
 
 window.PROFILE = {
@@ -7,7 +7,7 @@ window.PROFILE = {
   nameEn: "Gong Byeongwoo",
   email: "gongtiger1011@gmail.com",
   github: "https://github.com/gbw11/portfolio", // GitHub 버튼(상단·본문) 이동 주소
-  photo: "../assets/profile.jpg", // 페이지가 하위 폴더(devops/ 등)에 있으므로 ../ 기준
+  photo: "assets/profile.jpg",
   education: [
     { title: "경상국립대학교 수학과 · 데이터사이언스학(복수전공)", sub: "2019.03 ~ 2026.02" },
     { title: "삼성 청년 SW·AI 아카데미 (SSAFY) 15기", sub: "2026.01 ~ 2026.12 (수료 예정)" }, // TODO 시작·종료 월 확인
@@ -15,64 +15,33 @@ window.PROFILE = {
   certs: ["정보처리기사", "빅데이터분석기사", "SQLD", "ADsP"],
 };
 
-window.ROLES = {
-  backend: {
-    label: "Backend",
-    eyebrow: "Backend Developer",
-    tagline: "요청이 실패해도\n데이터는 틀리지 않게",
-    intro:
-      "클라이언트가 보낸 값을 그대로 믿지 않고, 서버가 근거를 직접 확인한 뒤에 저장합니다. 상태 전이·권한·멱등성처럼 조용히 틀어지는 지점을 테스트로 고정하는 백엔드 개발자입니다.",
-    highlights: [
-      { value: "P0 차단", label: "클라이언트가 보고한 tx 해시를 체인 영수증으로 재검증" },
-      { value: "+271", label: "5역할 × 45개 엔드포인트 권한 매트릭스 통합 테스트" },
-      { value: "650+", label: "하드웨어·외부 API 없이 도는 테스트 직접 작성" },
-    ],
-    projectOrder: ["circular", "potner", "finance"],
-    featured: {
-      circular: ["forgery", "wallet-unique", "authz-evidence", "char-varchar", "jackson"],
-      potner: ["skipped", "mqtt-acl", "idempotent", "nan"],
-      finance: ["yf-version"],
-    },
-    skillOrder: ["backend", "infra", "test", "frontend", "iot", "data"],
+// 한 페이지에 Backend · Infra/DevOps · Data를 모두 담습니다.
+window.MAIN = {
+  eyebrow: "Backend · Infra/DevOps · Data",
+  tagline: "조용히 틀리는 지점을\n먼저 찾아 막습니다",
+  intro:
+    "성공 응답 뒤에 숨은 실패를 찾는 개발자입니다. 클라이언트가 보낸 값을 서버가 직접 검증하고, 배포의 헬스체크·롤백·스키마 게이트가 실제로 동작하는지 일부러 깨뜨려 확인하며, 감으로 정한 기준값은 실측 분포와 대조해 고칩니다.",
+  highlights: [
+    { value: "P0 차단", label: "클라이언트가 보고한 tx 해시를 체인 영수증으로 재검증" },
+    { value: "25초", label: "깨진 이미지 배포 시 직전 이미지 자동 롤백 (실측)" },
+    { value: "0건", label: "스키마 diff 게이트 거짓 양성 (42개 테이블 · 412개 컬럼)" },
+    { value: "1.3초", label: "음성 대화 첫 소리 (직렬 처리 시 턴당 약 8초)" }, // TODO 기준선 확인
+  ],
+  projectOrder: ["circular", "potner", "finance"],
+  // 처음부터 보이는 트러블슈팅 (나머지는 '더 보기')
+  featured: {
+    circular: ["forgery", "ufw", "rollback", "schema-gate", "char-varchar", "wallet-unique"],
+    potner: ["mqtt-acl", "skipped", "latency", "device-id", "brightness", "awb"],
+    finance: ["yf-version", "yf-dedupe", "wheel"],
   },
-  devops: {
-    label: "Infra / DevOps",
-    eyebrow: "Infra · DevOps Engineer",
-    tagline: "초록불이\n거짓말하지 않는 배포",
-    intro:
-      "배포가 '성공'으로 끝났는데 서비스가 깨지는 순간을 줄이는 일을 합니다. 헬스체크·롤백·스키마 게이트가 실제로 동작하는지 일부러 깨뜨려서 확인하고, 6인 팀의 EC2·Compose·Nginx·Jenkins 운영을 맡았습니다.",
-    highlights: [
-      { value: "25초", label: "깨진 이미지를 배포해 직전 이미지로 자동 롤백되는 시간 실측" },
-      { value: "0건", label: "스키마 diff 게이트 거짓 양성 (42개 테이블 · 412개 컬럼)" },
-      { value: "약 200건", label: "직접 병합한 MR · 팀 공지 약 20건 작성" },
-    ],
-    projectOrder: ["circular", "potner", "finance"],
-    featured: {
-      circular: ["ufw", "rollback", "schema-gate", "prune", "env-recreate", "char-varchar"],
-      potner: ["device-id", "pi-ops", "mqtt-broker"],
-      finance: [],
-    },
-    skillOrder: ["infra", "backend", "test", "iot", "data", "frontend"],
-  },
-  data: {
-    label: "Data",
-    eyebrow: "Data · Backend Developer",
-    tagline: "측정한 숫자로\n판단을 바꿉니다",
-    intro:
-      "수학과 데이터 사이언스를 전공했습니다. 감으로 정한 기준값을 실측 분포와 대조해 고치고, 센서·시세·스키마처럼 '틀린 값이 조용히 섞이는' 데이터의 정합성을 지키는 일을 해 왔습니다.",
-    highlights: [
-      { value: "200~246", label: "실기 밝기 분포로 합성 이미지 기준(215)의 오판을 찾아 기준 변경" },
-      { value: "95%", label: "LLM 비용 중 입력 토큰 비중 실측 (10턴 34,581토큰)" },
-      { value: "0건", label: "information_schema 대조 거짓 양성 (412개 컬럼)" },
-    ],
-    projectOrder: ["potner", "finance", "circular"],
-    featured: {
-      potner: ["brightness", "awb", "water-level", "factcheck", "cost", "latency"],
-      finance: ["yf-dedupe", "yf-version"],
-      circular: ["schema-gate", "startblock"],
-    },
-    skillOrder: ["data", "backend", "infra", "test", "iot", "frontend"],
-  },
+  skillOrder: ["backend", "infra", "data", "test", "frontend", "iot"],
+};
+
+// 트러블슈팅 분야 필터
+window.FIELDS = {
+  backend: "Backend",
+  devops: "Infra / DevOps",
+  data: "Data",
 };
 
 window.SKILLS = {
@@ -402,7 +371,7 @@ window.PROJECTS = {
         result: "중복 없는 순위와 한글 종목명을 제공합니다.",
       },
       {
-        id: "wheel", tags: [],
+        id: "wheel", tags: ["frontend"],
         title: "마우스 휠 줌 미동작",
         problem: "차트 위에서 휠을 굴려도 줌 대신 페이지가 스크롤됐습니다.",
         cause: "브라우저가 wheel 리스너를 passive로 등록해 preventDefault()가 무시됐습니다.",
