@@ -25,7 +25,7 @@ window.MAIN = {
     { value: "P0 차단", label: "클라이언트가 보고한 tx 해시를 체인 영수증으로 재검증" },
     { value: "25초", label: "깨진 이미지 배포 시 직전 이미지 자동 롤백 (실측)" },
     { value: "0건", label: "스키마 diff 게이트 거짓 양성 (42개 테이블 · 412개 컬럼)" },
-    { value: "1.3초", label: "음성 대화 첫 소리 (직렬 처리 시 턴당 약 8초)" }, // TODO 기준선 확인
+    { value: "1.3초", label: "음성 대화 첫 소리 (직렬 처리 시 6~8초)" },
   ],
   projectOrder: ["circular", "potner", "finance"],
   // 처음부터 보이는 트러블슈팅 (나머지는 '더 보기')
@@ -67,7 +67,7 @@ window.PROJECTS = {
     metrics: [
       { value: "13,200줄", label: "스테이션 코드·테스트·설정 (전부 본인 커밋)" },
       { value: "650+", label: "하드웨어·실제 API 없이 통과하는 테스트" },
-      { value: "1.3초", label: "음성 대화 첫 소리 (직렬 처리 시 턴당 약 8초)" }, // TODO 기준선 표현 확인
+      { value: "1.3초", label: "음성 대화 첫 소리 (직렬 처리 시 6~8초)" },
       { value: "4중", label: "과급수 방지 안전 게이트" },
     ],
     results: [
@@ -97,11 +97,11 @@ window.PROJECTS = {
       {
         id: "latency", tags: ["backend", "data"],
         title: "음성 대화의 첫 소리까지 긴 무음 구간",
-        problem: "STT → LLM → TTS를 직렬로 처리해 답이 들리기까지 턴당 약 8초가 걸렸습니다.", // TODO 수치 확인
+        problem: "STT → LLM → TTS를 직렬로 처리해 첫 소리가 들리기까지 6~8초의 무음 구간이 있었습니다.",
         cause: "LLM 게이트웨이 경유 첫 토큰 지연이 1.4~4.7초로 변동이 커서 직렬 구조로는 줄일 수 없었습니다.",
         action: "필러 음성 3개를 서버 시작 시 미리 합성하고, 문장 단위 병렬 TTS(스레드풀 2개)와 첫 조각 약 20자 조기 절단으로 파이프라인화했습니다. 구간별 지연은 모니터 페이지에 막대로 시각화했습니다.",
         result: "첫 소리까지 1.3초로 단축했습니다.",
-        metric: "약 8초 → 1.3초",
+        metric: "6~8초 → 1.3초",
       },
       {
         id: "mqtt-broker", tags: ["backend", "devops"],
