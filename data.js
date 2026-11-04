@@ -43,6 +43,30 @@ window.FIELDS = {
   data: "Data",
 };
 
+// 직무별 페이지 (예: backend/index.html). MAIN 위에 덮어쓰며, onlyTag 분야의 사례만 보여 줍니다.
+window.VARIANTS = {
+  backend: {
+    eyebrow: "Backend Developer",
+    tagline: "요청이 실패해도\n데이터는 틀리지 않게",
+    intro:
+      "클라이언트가 보낸 값을 그대로 믿지 않고, 서버가 근거를 직접 확인한 뒤에 저장합니다. 상태 전이·권한·멱등성처럼 조용히 틀어지는 지점을 테스트로 고정하는 백엔드 개발자입니다.",
+    highlights: [
+      { value: "P0 차단", label: "클라이언트가 보고한 tx 해시를 체인 영수증으로 재검증" },
+      { value: "+271", label: "5역할 × 45개 엔드포인트 권한 매트릭스 통합 테스트" },
+      { value: "650+", label: "하드웨어·외부 API 없이 도는 테스트 직접 작성" },
+      { value: "1.3초", label: "음성 대화 첫 소리 (SSE 스트리밍 파이프라인, 직렬 처리 시 6~8초)" },
+    ],
+    projectOrder: ["circular", "potner", "finance"],
+    featured: {
+      circular: ["forgery", "wallet-unique", "authz-evidence", "jackson", "char-varchar", "minio"],
+      potner: ["skipped", "mqtt-acl", "idempotent", "nan", "factcheck", "latency"],
+      finance: ["yf-version"],
+    },
+    skillOrder: ["backend", "test", "infra", "frontend", "data", "iot"],
+    onlyTag: "backend",
+  },
+};
+
 window.SKILLS = {
   backend: { title: "Backend", items: ["Java · Spring Boot", "Spring Security (JWT, @PreAuthorize)", "JPA · QueryDSL", "Python · Django REST · FastAPI", "MySQL 8", "MinIO (S3, AWS SDK v2)", "MQTT (paho, Mosquitto ACL)"] },
   infra: { title: "Infra / DevOps", items: ["Docker · Docker Compose", "Jenkins Multibranch · JCasC", "Nginx (HTTPS, HSTS, limit_req)", "Let's Encrypt", "Linux · UFW · systemd · cron(flock)", "GitLab Commit Status / Notes API"] },
