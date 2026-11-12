@@ -29,7 +29,7 @@ window.MAIN = {
   projectOrder: ["circular", "potner", "finance"],
   // 처음부터 보이는 트러블슈팅 (나머지는 '더 보기')
   featured: {
-    circular: ["forgery", "ufw", "rollback", "schema-gate", "char-varchar", "wallet-unique"],
+    circular: ["forgery", "ufw", "rollback", "schema-gate", "char-varchar", "wallet-unique", "jackson", "lock-expiry"],
     potner: ["mqtt-acl", "skipped", "latency", "device-id", "idempotent", "pi-ops"],
     finance: ["yf-version", "wheel"],
   },
@@ -190,6 +190,8 @@ window.PROJECTS = {
       "병합 전 마이그레이션 CI 게이트, develop 빌드 실패 시 원래 MR에 자동 코멘트",
       "MySQL 매일 백업(14일 보관) + 오프사이트 반출, 복구 스크립트는 기본 dry-run",
       "지갑 서명 로그인(nonce 발급·검증) + 지갑 등록·조회·비활성화 API 단독 설계·구현",
+      "소비자 상품 상세의 자리표시자였던 '구매하기'를 실제 주문 생성 + 카카오페이 결제로 연결하고, 배송지를 화면 이동 없이 그 자리에서 고르게 함",
+      "소비자 마이페이지 주문·문의 화면 개편",
     ],
     cases: [
       {
@@ -304,6 +306,14 @@ window.PROJECTS = {
         cause: "S3Exception만 잡았는데, 컨테이너 정지·DNS 실패는 상속 관계가 없는 SdkClientException이었습니다. 가짜 S3 클라이언트가 모든 실패를 S3Exception으로 흉내 내 테스트도 통과했습니다.",
         action: "예외 처리와 테스트 더블을 함께 고치고, 수정 전 코드에서 새 테스트가 실패하는 것을 확인했습니다. MinIO 장애가 backend 기동을 막지 않도록 의존성도 완화했습니다.",
         result: "저장소 장애가 일관된 에러 응답으로 나갑니다.",
+      },
+      {
+        id: "lock-expiry", tags: ["backend"],
+        title: "만료된 잠금이 가용 수량을 계속 깎음 (내 MR의 버그)",
+        problem: "기한이 지난 소재 잠금이 사용 가능 수량에서 계속 차감됐습니다. 제 MR에서 넣은 버그였습니다.",
+        cause: "잠금을 EXPIRED로 바꾸는 배치가 없어 기한이 지나도 DB에는 ACTIVE로 남았는데, 쿼리는 status만 보고 차감했습니다. 도메인 규칙은 '전환 전이라도 가용 수량에서 제외'였습니다.",
+        action: "서브쿼리에 expires_at 조건(NULL이거나 현재 이후)을 추가하고 시각은 주입된 Clock으로 받았습니다. 의도적 차감을 고정했던 테스트를 뒤집고 만료·기한 남음·기한 없음 경계 테스트 3개로 나눴습니다.",
+        result: "만료된 잠금은 차감하지 않고, 기한 없는 잠금을 빠뜨려 수량을 과대 계산하는 반대 실수도 테스트로 막았습니다.",
       },
     ],
   },
