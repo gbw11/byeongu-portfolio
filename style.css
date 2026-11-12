@@ -39,6 +39,7 @@
 }
 
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 html { scroll-behavior: smooth; scroll-padding-top: 72px; }
 body {
   margin: 0;
@@ -142,6 +143,7 @@ a { color: inherit; }
 .metric span { font-size: 13px; color: var(--muted); }
 .tags, .chips { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 6px; }
 .tags li, .chips li { font-size: 13px; padding: 3px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.chips li { font-size: 15px; padding: 7px 16px; }
 .sub { font-size: 15px; margin: 28px 0 10px; color: var(--muted); }
 
 /* case */
@@ -158,7 +160,6 @@ a { color: inherit; }
 .badge { font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 6px; border: 1px solid var(--line); color: var(--muted); }
 .badge.b-backend { color: #2f6fed; border-color: color-mix(in srgb, #2f6fed 35%, transparent); }
 .badge.b-devops { color: #b5651d; border-color: color-mix(in srgb, #b5651d 35%, transparent); }
-.badge.b-data { color: #7a4fc9; border-color: color-mix(in srgb, #7a4fc9 35%, transparent); }
 .case-metric { flex: none; font-size: 13px; font-weight: 700; color: var(--ok); background: color-mix(in srgb, var(--ok) 12%, transparent); padding: 2px 8px; border-radius: 6px; }
 .case-body { display: grid; grid-template-columns: 52px 1fr; gap: 6px 12px; margin: 0; padding: 0 16px 16px; font-size: 15px; }
 .case-body dt { font-weight: 700; color: var(--muted); font-size: 13px; padding-top: 2px; }

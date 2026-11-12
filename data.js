@@ -1,5 +1,5 @@
 // 포트폴리오 콘텐츠. 내용 수정은 이 파일에서만 하면 됩니다.
-// tags: 사례의 분야 (backend | devops | data) — 필터와 배지에 사용
+// tags: 사례의 분야 (backend | devops) — 필터와 배지에 사용
 
 window.PROFILE = {
   name: "공병우",
@@ -14,12 +14,12 @@ window.PROFILE = {
   certs: ["정보처리기사", "빅데이터분석기사", "SQLD", "ADsP"],
 };
 
-// 한 페이지에 Backend · Infra/DevOps · Data를 모두 담습니다.
+// 한 페이지에 Backend · Infra/DevOps를 모두 담습니다.
 window.MAIN = {
-  eyebrow: "Backend · Infra/DevOps · Data",
+  eyebrow: "Backend · Infra/DevOps",
   tagline: "조용히 틀리는 지점을\n먼저 찾아 막습니다",
   intro:
-    "성공 응답 뒤에 숨은 실패를 찾는 개발자입니다. 클라이언트가 보낸 값을 서버가 직접 검증하고, 배포의 헬스체크·롤백·스키마 게이트가 실제로 동작하는지 일부러 깨뜨려 확인하며, 감으로 정한 기준값은 실측 분포와 대조해 고칩니다.",
+    "성공 응답 뒤에 숨은 실패를 찾는 개발자입니다. 클라이언트가 보낸 값을 서버가 직접 검증하고, 배포의 헬스체크·롤백·스키마 게이트가 실제로 동작하는지 일부러 깨뜨려 확인합니다.",
   highlights: [
     { value: "P0 차단", label: "클라이언트가 보고한 tx 해시를 체인 영수증으로 재검증" },
     { value: "25초", label: "깨진 이미지 배포 시 직전 이미지 자동 롤백 (실측)" },
@@ -30,23 +30,21 @@ window.MAIN = {
   // 처음부터 보이는 트러블슈팅 (나머지는 '더 보기')
   featured: {
     circular: ["forgery", "ufw", "rollback", "schema-gate", "char-varchar", "wallet-unique"],
-    potner: ["mqtt-acl", "skipped", "latency", "device-id", "brightness", "awb"],
-    finance: ["yf-version", "yf-dedupe", "wheel"],
+    potner: ["mqtt-acl", "skipped", "latency", "device-id", "idempotent", "pi-ops"],
+    finance: ["yf-version", "wheel"],
   },
-  skillOrder: ["backend", "infra", "data", "test", "frontend", "iot"],
+  skillOrder: ["backend", "infra", "test", "frontend", "iot"],
 };
 
 // 트러블슈팅 분야 필터
 window.FIELDS = {
   backend: "Backend",
   devops: "Infra / DevOps",
-  data: "Data",
 };
 
 window.SKILLS = {
   backend: { title: "Backend", items: ["Java · Spring Boot", "Spring Security (JWT, @PreAuthorize)", "JPA · QueryDSL", "Python · Django REST · FastAPI", "MySQL 8", "MinIO (S3, AWS SDK v2)", "MQTT (paho, Mosquitto ACL)"] },
   infra: { title: "Infra / DevOps", items: ["Docker · Docker Compose", "Jenkins Multibranch · JCasC", "Nginx (HTTPS, HSTS, limit_req)", "Let's Encrypt", "Linux · UFW · systemd · cron(flock)", "GitLab Commit Status / Notes API"] },
-  data: { title: "Data", items: ["Python", "SQL · information_schema", "yfinance", "ApexCharts", "SQLD · ADsP · 빅데이터분석기사"] },
   test: { title: "Test", items: ["JUnit5 · MockMvc · H2", "pytest", "Vitest · Testing Library"] },
   frontend: { title: "Frontend", items: ["React · TypeScript · Vite", "TanStack Query · Zustand", "Vue 3 · Pinia", "Next.js (App Router)", "ethers v6 · MetaMask (EIP-191)"] },
   iot: { title: "IoT / AI", items: ["Raspberry Pi · GPIO · PWM · I2C", "Picamera2", "ROS2 (rclpy)", "LLM Function Calling · SSE", "Whisper · faster-whisper · TTS"] },
@@ -94,7 +92,7 @@ window.PROJECTS = {
         result: "서버팀이 반영했고, 서버 javadoc에 '라즈베리 구현이 기준'이라고 명시됐습니다.",
       },
       {
-        id: "latency", tags: ["backend", "data"],
+        id: "latency", tags: ["backend"],
         title: "음성 대화의 첫 소리까지 긴 무음 구간",
         problem: "STT → LLM → TTS를 직렬로 처리해 첫 소리가 들리기까지 6~8초의 무음 구간이 있었습니다.",
         cause: "LLM 게이트웨이 경유 첫 토큰 지연이 1.4~4.7초로 변동이 커서 직렬 구조로는 줄일 수 없었습니다.",
@@ -135,7 +133,7 @@ window.PROJECTS = {
         result: "같은 원인이 재발할 수 없도록 구조적으로 막았습니다.",
       },
       {
-        id: "water-level", tags: ["data", "backend"],
+        id: "water-level", tags: ["backend"],
         title: "물을 채워도 '물 부족' 알림이 풀리지 않음",
         problem: "물탱크를 채웠는데도 앱의 물 부족 알림이 계속 남아 있었습니다.",
         cause: "waterLow: true만 발행하고 false는 생략했습니다. 서버 코드를 읽어 매번 값을 덮어쓰는 구조임을 확인했습니다.",
@@ -143,36 +141,12 @@ window.PROJECTS = {
         result: "실기 로그에서 전환 후 10초 뒤 true 확정, 복구 시 false 재확정을 확인했습니다.",
       },
       {
-        id: "brightness", tags: ["data"],
-        title: "밝기 검사 실패 시 그날 사진이 통째로 사라짐",
-        problem: "밝기 검사가 ERROR를 내면 서버가 촬영 체인 전체를 중단해 사진이 남지 않았습니다.",
-        cause: "합성 이미지로 잡은 상한 215가 실기 사진 분포(200~246)와 맞지 않았습니다. 실기 4장 중 245.7이 탈락했습니다.",
-        action: "실패 동작을 reject에서 warn으로 바꿔 사진을 보존하고, 노출 보정도 1.0에서 0.3으로 완화했습니다.",
-        result: "기준값을 실측 분포에 맞춰 사진 유실을 막았습니다.",
-      },
-      {
-        id: "awb", tags: ["data"],
-        title: "촬영 사진 전체에 녹색빛이 섞임",
-        problem: "실사진의 R/B 채널이 G 대비 15~20% 낮았습니다.",
-        cause: "OV5647 자동 화이트밸런스가 잎(녹색) 위주 장면에서 오작동했고, daylight 프리셋으로도 색 편차가 남았습니다.",
-        action: "Gray-world 기반 색편차 분석 도구를 만들어 고정 게인 colour_gains [1.548, 1.401]을 산출했습니다. 메타데이터 없는 JPEG에는 게인을 제안하지 않도록 안전장치를 두었습니다.",
-        result: "무채색 기준으로 색 편차가 사라진 것을 확인했습니다. 관련 테스트 21건을 작성했습니다.",
-      },
-      {
-        id: "factcheck", tags: ["data", "backend"],
+        id: "factcheck", tags: ["backend"],
         title: "LLM이 센서값을 지어내지 않도록 검증",
         problem: "LLM이 정답(영하 온도)을 말해도 팩트체크가 기각했고, 오래된 센서값이 답변에 섞일 위험이 있었습니다.",
         cause: "'영하 5도'를 +5로 파싱하는 버그가 있었고, '값 없음'과 '오래된 값'의 의미가 구분되지 않았습니다.",
         action: "파싱을 고치고 회귀 테스트 3건을 추가했습니다. 센서 상태를 NO_DATA(값 제외)와 STALE(값은 쓰되 재판정)로 나누고, 폴백 파일에 트랩값(99.9°C)을 심었습니다.",
         result: "'서버 실측 → 툴 → 팩트체크 → 답변' 경로가 폴백을 우회하지 않음을 E2E로 증명했습니다.",
-      },
-      {
-        id: "cost", tags: ["data"],
-        title: "LLM 비용 구조 실측",
-        problem: "대화 기능의 비용이 어디서 발생하는지 근거 없이 추정하고 있었습니다.",
-        cause: "턴마다 시스템 프롬프트와 대화 맥락이 반복 전송됩니다.",
-        action: "10턴 대화의 크레딧·토큰을 실측하고, tool_calls와 tool 응답 쌍이 끊기지 않게 교환 단위로 맥락을 자르도록 했습니다.",
-        result: "10턴 464크레딧(34,581토큰), 턴당 약 46크레딧이며 입력 토큰이 95%임을 파악했습니다.",
       },
       {
         id: "pi-ops", tags: ["devops"],
@@ -244,7 +218,7 @@ window.PROJECTS = {
         metric: "롤백 25초",
       },
       {
-        id: "schema-gate", tags: ["devops", "data"],
+        id: "schema-gate", tags: ["devops"],
         title: "스키마 검사는 'OK'인데 백엔드가 크래시루프",
         problem: "배포 전 스키마 검증이 통과했는데 test 백엔드가 기동하지 못했습니다.",
         cause: "스크립트 안의 git fetch 실패를 '|| true'가 삼켜 오래된 기준으로 비교했습니다. Jenkins는 배포 디렉터리를 읽기 전용(:ro)으로 마운트해 fetch가 항상 실패했습니다.",
@@ -260,7 +234,7 @@ window.PROJECTS = {
         result: "운영 328개 컬럼에서 거짓 양성 0건, 일부러 틀린 6곳은 모두 검출했습니다.",
       },
       {
-        id: "wallet-unique", tags: ["backend", "data"],
+        id: "wallet-unique", tags: ["backend"],
         title: "이력은 보존하면서 '활성 지갑 1개'만 강제",
         problem: "지갑 교체 이력을 남기면서 사용자당 활성 지갑은 하나만 허용해야 했습니다.",
         cause: "MySQL 8은 WHERE 절이 있는 부분 UNIQUE를 지원하지 않습니다.",
@@ -292,7 +266,7 @@ window.PROJECTS = {
         result: "잘못된 입력이 성공으로 저장되는 경로를 전역에서 막았습니다.",
       },
       {
-        id: "startblock", tags: ["backend", "data"],
+        id: "startblock", tags: ["backend"],
         title: "MetaMask 서명 확인까지 수십 초",
         problem: "서명 확인 지연이 해결된 뒤 다시 나타났습니다.",
         cause: "중복 발행 체크가 제네시스 블록부터 전체 로그를 훑었습니다. 시작 블록 환경변수가 Dockerfile ARG와 배포 .env 양쪽에서 빠져 0으로 폴백됐습니다.",
@@ -354,20 +328,12 @@ window.PROJECTS = {
     ],
     cases: [
       {
-        id: "yf-version", tags: ["backend", "data"],
+        id: "yf-version", tags: ["backend"],
         title: "yfinance 버전 호환 이슈",
         problem: "문서대로 작성한 스크리너 코드가 동작하지 않았습니다.",
         cause: "설치된 버전에 yf.Screener() 클래스가 없었습니다.",
         action: "screen 함수를 직접 임포트하고 size 파라미터를 count로 바꿨습니다.",
         result: "시가총액 상위 종목 조회를 복구했습니다.",
-      },
-      {
-        id: "yf-dedupe", tags: ["data"],
-        title: "미국 시가총액 순위에 해외 중복 종목 혼입",
-        problem: "미국 시가총액 목록에 해외 상장 중복 종목이 섞였습니다.",
-        cause: "조회 조건에 지역 제한이 없었습니다.",
-        action: "EquityQuery에 region=us 조건을 추가하고 회사명 앞 두 단어 기준으로 중복을 제거했습니다. 국내 종목은 한글명 사전을 우선 조회하고 미등록 종목만 영문명으로 폴백했습니다.",
-        result: "중복 없는 순위와 한글 종목명을 제공합니다.",
       },
       {
         id: "wheel", tags: ["frontend"],

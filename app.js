@@ -5,7 +5,12 @@
 
   function storageSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
 
-  let field = "all"; // 트러블슈팅 분야 필터
+  // 직무별 페이지면 MAIN 위에 VARIANTS[VARIANT]를 덮어씀
+  const CFG = Object.assign({}, MAIN, (window.VARIANTS || {})[window.VARIANT] || {});
+  // 사진 등 자산 경로는 data.js 위치 기준 (하위 폴더 페이지 대응)
+  const BASE = new URL(".", document.querySelector('script[src$="data.js"]').src).href;
+
+  let field = CFG.onlyTag || "all"; // 트러블슈팅 분야 필터
   const openProjects = new Set(); // 자세히 보기 펼친 프로젝트 (필터 변경 시 유지)
 
   function renderStatic() {
@@ -17,14 +22,14 @@
     $("mailBtn").href = "mailto:" + p.email;
     $("mailBtn").textContent = p.email;
     $("avatar").innerHTML = p.photo
-      ? `<img src="${esc(p.photo)}" alt="${esc(p.name)}" />`
+      ? `<img src="${esc(new URL(p.photo, BASE).href)}" alt="${esc(p.name)}" />`
       : `<span>${esc(p.name.slice(0, 1))}</span>`;
     $("eduList").innerHTML = p.education
       .map((e) => `<li><strong>${esc(e.title)}</strong><span class="muted">${esc(e.sub)}</span></li>`)
       .join("");
     $("certList").innerHTML = p.certs.map((c) => `<li>${esc(c)}</li>`).join("");
 
-    const m = MAIN;
+    const m = CFG;
     $("eyebrow").textContent = m.eyebrow;
     $("tagline").innerHTML = esc(m.tagline).replace(/\n/g, "<br />");
     $("intro").textContent = m.intro;
@@ -40,6 +45,10 @@
       )
       .join("");
 
+    if (CFG.onlyTag) {
+      $("filterRow").hidden = true;
+      return;
+    }
     const filters = [["all", "전체"]].concat(Object.entries(FIELDS));
     $("fieldFilter").innerHTML = filters
       .map(([k, label]) => `<button data-field="${k}">${esc(label)}</button>`)
@@ -75,15 +84,16 @@
 
   function casesBlock(key, p) {
     // 필터가 걸리면 해당 분야 사례를 모두 보이고, '전체'면 대표 사례 + 더 보기
-    if (field !== "all") {
+    if (field !== "all" && !CFG.onlyTag) {
       const list = p.cases.filter((c) => c.tags.includes(field));
       if (!list.length) return `<p class="muted empty">이 프로젝트에는 ${esc(FIELDS[field])} 사례가 없습니다.</p>`;
       return `<div class="cases">${list.map((c) => caseHTML(c, false)).join("")}</div>`;
     }
-    const ids = MAIN.featured[key] || [];
-    const byId = Object.fromEntries(p.cases.map((c) => [c.id, c]));
+    const pool = CFG.onlyTag ? p.cases.filter((c) => c.tags.includes(CFG.onlyTag)) : p.cases;
+    const ids = CFG.featured[key] || [];
+    const byId = Object.fromEntries(pool.map((c) => [c.id, c]));
     const featured = ids.map((id) => byId[id]).filter(Boolean);
-    const rest = p.cases.filter((c) => !ids.includes(c.id));
+    const rest = pool.filter((c) => !ids.includes(c.id));
     const more = rest.length
       ? `<details class="more"><summary>다른 트러블슈팅 ${rest.length}건 더 보기</summary>
            <div class="cases">${rest.map((c) => caseHTML(c, false)).join("")}</div></details>`
@@ -138,8 +148,8 @@
       b.setAttribute("aria-pressed", b.dataset.field === field);
     });
     // 분야를 고르면 모든 프로젝트의 자세히 보기를 펼쳐 결과를 바로 보여 줌
-    if (field !== "all") MAIN.projectOrder.forEach((k) => openProjects.add(k));
-    $("projectList").innerHTML = MAIN.projectOrder.map((k, i) => projectHTML(k, i)).join("");
+    if (field !== "all" && !CFG.onlyTag) CFG.projectOrder.forEach((k) => openProjects.add(k));
+    $("projectList").innerHTML = CFG.projectOrder.map((k, i) => projectHTML(k, i)).join("");
     document.querySelectorAll(".proj-detail").forEach((d) => {
       d.addEventListener("toggle", () => {
         if (d.open) openProjects.add(d.dataset.key);
