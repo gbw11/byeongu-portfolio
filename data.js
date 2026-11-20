@@ -24,7 +24,7 @@ window.MAIN = {
     { value: "P0 차단", label: "클라이언트가 보고한 tx 해시를 체인 영수증으로 재검증" },
     { value: "25초", label: "깨진 이미지 배포 시 직전 이미지 자동 롤백 (실측)" },
     { value: "0건", label: "스키마 diff 게이트 거짓 양성 (42개 테이블 · 412개 컬럼)" },
-    { value: "1.3초", label: "음성 대화 첫 소리 (직렬 처리 시 6~8초)" },
+    { value: "1.3~2.1초", label: "음성 대화 첫 소리 (직렬 처리 시 10초 이상)" },
   ],
   projectOrder: ["circular", "potner", "finance"],
   // 처음부터 보이는 트러블슈팅 (나머지는 '더 보기')
@@ -45,7 +45,7 @@ window.FIELDS = {
 window.SKILLS = {
   backend: { title: "Backend", items: ["Java · Spring Boot", "Spring Security (JWT, @PreAuthorize)", "JPA · QueryDSL", "Python · Django REST · FastAPI", "MySQL 8", "MinIO (S3, AWS SDK v2)", "MQTT (paho, Mosquitto ACL)"] },
   infra: { title: "Infra / DevOps", items: ["Docker · Docker Compose", "Jenkins Multibranch · JCasC", "Nginx (HTTPS, HSTS, limit_req)", "Let's Encrypt", "Linux · UFW · systemd · cron(flock)", "GitLab Commit Status / Notes API"] },
-  test: { title: "Test", items: ["JUnit5 · MockMvc · H2", "pytest", "Vitest · Testing Library"] },
+  test: { title: "Test", items: ["MockMvc · H2", "pytest", "Vitest · Testing Library"] },
   frontend: { title: "Frontend", items: ["React · TypeScript · Vite", "TanStack Query · Zustand", "Vue 3 · Pinia", "Next.js (App Router)", "ethers v6 · MetaMask (EIP-191)"] },
   iot: { title: "IoT / AI", items: ["Raspberry Pi · GPIO · PWM · I2C", "Picamera2", "ROS2 (rclpy)", "LLM Function Calling · SSE", "Whisper · faster-whisper · TTS"] },
 };
@@ -64,7 +64,7 @@ window.PROJECTS = {
     metrics: [
       { value: "13,200줄", label: "스테이션 코드·테스트·설정 (전부 본인 커밋)" },
       { value: "650+", label: "하드웨어·실제 API 없이 통과하는 테스트" },
-      { value: "1.3초", label: "음성 대화 첫 소리 (직렬 처리 시 6~8초)" },
+      { value: "1.3~2.1초", label: "음성 대화 첫 소리 (직렬 처리 시 10초 이상)" },
       { value: "4중", label: "과급수 방지 안전 게이트" },
     ],
     results: [
@@ -94,11 +94,11 @@ window.PROJECTS = {
       {
         id: "latency", tags: ["backend"],
         title: "음성 대화의 첫 소리까지 긴 무음 구간",
-        problem: "STT → LLM → TTS를 직렬로 처리해 첫 소리가 들리기까지 6~8초의 무음 구간이 있었습니다.",
+        problem: "STT → LLM → TTS를 직렬로 처리해 첫 소리가 들리기까지 10초 이상의 무음 구간이 있었습니다.",
         cause: "LLM 게이트웨이 경유 첫 토큰 지연이 1.4~4.7초로 변동이 커서 직렬 구조로는 줄일 수 없었습니다.",
         action: "필러 음성 3개를 서버 시작 시 미리 합성하고, 문장 단위 병렬 TTS(스레드풀 2개)와 첫 조각 약 20자 조기 절단으로 파이프라인화했습니다. 구간별 지연은 모니터 페이지에 막대로 시각화했습니다.",
-        result: "첫 소리까지 1.3초로 단축했습니다.",
-        metric: "6~8초 → 1.3초",
+        result: "필러 음성으로 첫 소리를 1.3~2.1초에 내고, 본 답변 첫 조각은 약 5초에 나오게 했습니다.",
+        metric: "10초 이상 → 1.3~2.1초",
       },
       {
         id: "mqtt-broker", tags: ["backend", "devops"],
@@ -145,7 +145,7 @@ window.PROJECTS = {
         title: "LLM이 센서값을 지어내지 않도록 검증",
         problem: "LLM이 정답(영하 온도)을 말해도 팩트체크가 기각했고, 오래된 센서값이 답변에 섞일 위험이 있었습니다.",
         cause: "'영하 5도'를 +5로 파싱하는 버그가 있었고, '값 없음'과 '오래된 값'의 의미가 구분되지 않았습니다.",
-        action: "파싱을 고치고 회귀 테스트 3건을 추가했습니다. 센서 상태를 NO_DATA(값 제외)와 STALE(값은 쓰되 재판정)로 나누고, 폴백 파일에 트랩값(99.9°C)을 심었습니다.",
+        action: "파싱을 고치고 회귀 테스트 3건을 추가했습니다. 센서 상태를 NO_DATA(값 제외)와 STALE(값은 쓰되 재판정)로 나누고, 폴백 파일에 무작위로 대량 생성한 트랩값을 심었습니다.",
         result: "'서버 실측 → 툴 → 팩트체크 → 답변' 경로가 폴백을 우회하지 않음을 E2E로 증명했습니다.",
       },
       {
@@ -168,8 +168,8 @@ window.PROJECTS = {
   },
 
   circular: {
-    title: "Circular-Fashion",
-    subtitle: "순환 패션 소재 유통 플랫폼",
+    title: "SAEROI",
+    subtitle: "블록체인 기반 업사이클링 소재 유통 플랫폼",
     period: "2026.08 ~ 2026.09",
     team: "SSAFY 15기 특화 프로젝트 · 6인 팀",
     role: "인프라(EC2·Compose·Nginx·Jenkins·시크릿) 담당 + 지갑 서명 로그인, 공통 기능(시간대·파일 업로드·에러 응답·권한), Material 도메인",
@@ -181,11 +181,11 @@ window.PROJECTS = {
       { value: "25초", label: "깨진 이미지 배포 시 직전 이미지 자동 롤백 (실측)" },
       { value: "+271", label: "권한 매트릭스 통합 테스트 (862 → 1,133)" },
       { value: "0건", label: "스키마 대조 거짓 양성 (412개 컬럼)" },
-      { value: "P0 1 · P1 5", label: "테스트 스택 E2E 점검에서 발견·수정" },
+      { value: "P0 1건", label: "QR 블록체인 증명 위조 발견·수정" },
     ],
     results: [
       "nginx · frontend · backend · ai · mysql · jenkins · minio Compose 오케스트레이션 + Let's Encrypt HTTPS",
-      "Jenkins Multibranch(JCasC)로 5개 파트 독립 CI/CD, 배포 실패 시 자동 롤백",
+      "Jenkins Multibranch(JCasC)로 4개 파트 CI, 3개 파트(backend·frontend·ai) 자동 배포, 배포 실패 시 자동 롤백",
       "develop 병합 시 자동 갱신되는 통합 테스트 스택(/test/) — DB·스토리지 운영과 격리",
       "병합 전 마이그레이션 CI 게이트, develop 빌드 실패 시 원래 MR에 자동 코멘트",
       "MySQL 매일 백업(14일 보관) + 오프사이트 반출, 복구 스크립트는 기본 dry-run",
